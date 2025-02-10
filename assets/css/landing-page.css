@@ -218,9 +218,14 @@ body {
 
 .tutor-image {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
+    max-width: 100px; /* Sesuaikan dengan ukuran yang kamu inginkan */
+    max-height: 100px; /* Sesuaikan dengan ukuran yang kamu inginkan */
+    display: block;
+    margin: auto;
 }
+
 
 .tutor-info {
     padding: 1.5rem;
