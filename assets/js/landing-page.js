@@ -1,59 +1,82 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Slider functionality
-    const slides = document.querySelectorAll('.slide');
-    const navBtns = document.querySelectorAll('.nav-btn');
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
-    let currentSlide = 0;
-    let slideInterval;
+    // Tutor data
+    const tutors = [
+        {
+            name: "A***** S****",
+            university: "Universitas Indonesia",
+            rating: "4.9",
+            reviews: "120",
+            tasks: "156"
+        },
+        {
+            name: "M******* A******",
+            university: "Universitas Amikom Yogyakarta",
+            rating: "5.0",
+            reviews: "372",
+            tasks: "400"
+        },
+        {
+            name: "D*** S******",
+            university: "Universitas Ahmad Dahlan",
+            rating: "4.9",
+            reviews: "219",
+            tasks: "220"
+        },
+        {
+            name: "S****** G****",
+            university: "Universitas Mercu Buana",
+            rating: "4.9",
+            reviews: "120",
+            tasks: "156"
+        }
+    ];
 
-    function showSlide(index) {
-        // Remove active class from all slides and nav buttons
-        slides.forEach(slide => slide.classList.remove('active'));
-        navBtns.forEach(btn => btn.classList.remove('active'));
-        
-        // Add active class to current slide and nav button
-        slides[index].classList.add('active');
-        navBtns[index].classList.add('active');
+    const tutorGrid = document.querySelector('.tutor-grid');
+    const sliderContainer = document.createElement('div');
+    sliderContainer.className = 'slider-container';
+
+    // Function to create tutor card
+    function createTutorCard(tutor) {
+        return `
+            <div class="tutor-card">
+                <img src="images/DJV MAR 1011-04.jpg" alt="Tutor" class="tutor-image">
+                <div class="tutor-info">
+                    <h3 class="tutor-name">${tutor.name}</h3>
+                    <p class="tutor-university">${tutor.university}</p>
+                    <div class="tutor-stats">
+                        <span class="rating">
+                            <i class="fas fa-star"></i>
+                            ${tutor.rating} (${tutor.reviews} review)
+                        </span>
+                        <span class="completed-tasks">
+                            <i class="fas fa-check-circle"></i>
+                            ${tutor.tasks} tugas
+                        </span>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
-
-    function prevSlide() {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        showSlide(currentSlide);
-    }
-
-    // Add click event listeners to navigation buttons
-    navBtns.forEach((btn, index) => {
-        btn.addEventListener('click', () => {
-            currentSlide = index;
-            showSlide(currentSlide);
-            resetInterval();
-        });
+    // Add original cards
+    tutors.forEach(tutor => {
+        sliderContainer.insertAdjacentHTML('beforeend', createTutorCard(tutor));
     });
 
-    // Add click event listeners to prev/next buttons
-    prevBtn.addEventListener('click', () => {
-        prevSlide();
-        resetInterval();
+    // Clone cards for infinite scroll
+    tutors.forEach(tutor => {
+        sliderContainer.insertAdjacentHTML('beforeend', createTutorCard(tutor));
     });
 
-    nextBtn.addEventListener('click', () => {
-        nextSlide();
-        resetInterval();
+    // Add the slider container to the grid
+    tutorGrid.appendChild(sliderContainer);
+
+    // Optional: Reset animation when it ends
+    sliderContainer.addEventListener('animationend', () => {
+        sliderContainer.style.animation = 'none';
+        sliderContainer.offsetHeight; // Trigger reflow
+        sliderContainer.style.animation = 'slideLeft 40s linear infinite';
     });
-
-    function resetInterval() {
-        clearInterval(slideInterval);
-        slideInterval = setInterval(nextSlide, 5000);
-    }
-
-    // Start the auto-slide interval
-    slideInterval = setInterval(nextSlide, 5000);
 
     // Search functionality
     const searchBar = document.querySelector('.search-bar');
